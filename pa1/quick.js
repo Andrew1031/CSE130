@@ -197,16 +197,18 @@ const filter = (g, ls) => fold_left(g, List([]), ls);
 
 const partition = function(g, ls) {
 	firstList = filter(g, ls);
+	
 	//function that negates the current function g by getting the opposite of it
-	//const oppositeFunc = (g) => !g.apply(this, arguments);
+	function oppositeFunc(g)
+	{
+		//applies the opposite of g and returns that as a new function
+		return function()
+		{
+			return !g.apply(this, arguments);
+		}
+	}
 	
-		//return function()
-		//{
-			//console.log(ls);
-			//console.log(arguments);
-			//return function () {!g.apply(this, arguments});
-		//}
-	
+	//appends the lists together as a list of 2 lists
 	secondList = filter(oppositeFunc(g), ls);
 	return List([firstList, secondList]); 
 }
@@ -245,10 +247,10 @@ const quicksort = function(ls) {
   pivot = ls.first();
   
   //divides into 2 partitions
-  
+  const list1 = partition((x) => x <= x, ls); 
 
   //recursively calls quicksort on each partition
-
+  
 
   return ls;
   
