@@ -85,12 +85,46 @@ const sumList = (ls) => fold_left((acc, x) => acc + x, 0, ls);
 */
 
 const fold_left = function (f, base, ls) {
+  
+  //base case
   if (ls.size == 0) {
-    return base;
+   return base;
+  }
+  
+  //if the base is a list
+  if (!Number.isInteger(base))
+  {
+	num = f(ls.first(), base);
+	
+	//if the function was map
+	if (Number.isInteger(num))
+	{
+		base = base.concat(num);
+ 		return fold_left(f, base, ls.shift());
+	}
+
+	//if the function was filter or partition
+	else
+	{
+		//if the element should be in the filtered list
+		if (num)
+		{
+			base = base.concat(ls.first());
+			return fold_left(f, base, ls.shift());
+		}
+
+		else
+		{
+			return fold_left(f, base, ls.shift());
+		}
+	}
   }
 
   // Write the recursive fold_left call
-  return /** <FILL-IN> **/ undefined; /** </FILL-IN> **/
+  else
+  {
+  	return fold_left(f, f(ls.first(), base), ls.shift());
+  }
 };
 
 /* TASK 2 (10pts):
@@ -115,8 +149,7 @@ const fold_left = function (f, base, ls) {
   Hint: the base value could be an empty list (List([])).
 */
 
-const map = (g, ls) => /** <FILL-IN> **/ undefined; /** </FILL-IN> **/
-
+const map = (g, ls) => fold_left(g, List([]), ls);
 
 /* TASK 3 (7.5pts):
   In a similar fashion to map, your next task is to define the filter function
@@ -138,7 +171,7 @@ const map = (g, ls) => /** <FILL-IN> **/ undefined; /** </FILL-IN> **/
   Again, your constraint is to use fold_left only (no loops!).
 */
 
-const filter = (g, ls) => /** <FILL-IN> **/ undefined; /** </FILL-IN> **/
+const filter = (g, ls) => fold_left(g, List([]), ls);
 
 
 /* TASK 4 (7.5pts):
@@ -155,14 +188,28 @@ const filter = (g, ls) => /** <FILL-IN> **/ undefined; /** </FILL-IN> **/
 
   Some examples of partition are:
 
-  partition((x) => x <= 2, List([1,2,3,4])) ------> List([List([1,2]), List([3,4])])
+  partition((x) => x <= 3, List([1,2,3,4])) ------> List([List([1,2]), List([3,4])])
   partition((x) => x % 2 == 0, List([1,2,3,4])) ------> List([List([2,4]), List([1,3])])
 
   For this task, your constraint is to write this function using filter. You
   are not allowed to use other looping constructs, even fold_left.
 */
 
-const partition = (g, ls) => /** <FILL-IN> **/ undefined; /** </FILL-IN> **/
+const partition = function(g, ls) {
+	firstList = filter(g, ls);
+	//function that negates the current function g by getting the opposite of it
+	//const oppositeFunc = (g) => !g.apply(this, arguments);
+	
+		//return function()
+		//{
+			//console.log(ls);
+			//console.log(arguments);
+			//return function () {!g.apply(this, arguments});
+		//}
+	
+	secondList = filter(oppositeFunc(g), ls);
+	return List([firstList, secondList]); 
+}
 
 
 /* TASK 5 (15pts):
@@ -193,10 +240,18 @@ const quicksort = function(ls) {
   if(ls.size <= 1) {
     return ls;
   }
+  
+  //middle element is the pivot element x
+  pivot = ls.first();
+  
+  //divides into 2 partitions
+  
 
-  /** <FILL-IN> **/
-  return undefined;
-  /** </FILL-IN> **/
+  //recursively calls quicksort on each partition
+
+
+  return ls;
+  
 };
 
 
@@ -207,7 +262,10 @@ const quicksort = function(ls) {
 
 assert(sumList(List([1,2,3,4])) == 10);
 assert(map((x) => x * 2, List([1,2,3,4])).equals(List([2,4,6,8])));
+assert(map((x) => x * 4, List([1,2,3,4])).equals(List([4,8,12,16])));
 assert(filter((x) => x <= 2, List([1,2,3,4])).equals(List([1,2])));
+assert(filter((x) => x <= 0, List([1,2,3,4])).equals(List([])));
+assert(filter((x) => x <= 1, List([4,3,2,1])).equals(List([1])));
 assert(filter((x) => x % 2 == 0, List([1,2,3,4])).equals(List([2,4])));
 assert(partition((x) => x <= 2, List([1,2,3,4])).equals(List([List([1,2]), List([3,4])])));
 assert(partition((x) => x % 2 == 0, List([1,2,3,4])).equals(List([List([2,4]), List([1,3])])));

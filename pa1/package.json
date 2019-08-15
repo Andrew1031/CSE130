@@ -5,6 +5,7 @@
   "author": "UCSD CSE 130 Staff",
   "license": "UNLICENSED",
   "dependencies": {
-    "immutable": "^3.8.2"
+    "immutable": "^3.8.2",
+    "node": "^12.8.0"
   }
 }
